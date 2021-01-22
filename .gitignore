@@ -1,0 +1,6 @@
+.env
+node_modules/
+# testing files below
+google.html
+index.html
+index2.html
