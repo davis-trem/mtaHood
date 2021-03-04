@@ -96,7 +96,6 @@ function loadStops() {
  */
 
 function loadLines() {
-  console.log('getSubwayLines >>>', getSubwayLines)
   getSubwayLines.forEach(line => {
     const path = JSON.parse(
       line.the_geom.slice('LINESTRING '.length)
@@ -104,7 +103,6 @@ function loadLines() {
         .replace(/\(/g, '[')
         .replace(/\)/g, ']')
     );
-    console.log('path >>> ', path)
     L.polyline(path, {
       color: lineColors[line.RT_SYMBOL],
       smoothFactor: 1.0,
