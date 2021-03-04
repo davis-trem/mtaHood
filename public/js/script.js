@@ -43,7 +43,7 @@ const lineColors = {
 
 loadHoods();
 loadStops();
-// loadLines();
+loadLines();
 
 /**
  * @function loadHoods
@@ -90,18 +90,25 @@ function loadStops() {
   });
 }
 
-// function loadLines() {
-//   getSubwayLines.forEach(line => {
-//     const path = JSON.parse(
-//       line.the_geom.slice('LINESTRING '.length)
-//         .replace(/-\d{2}\.\d+ \d{2}\.\d+/g, (reg)=>`[${reg.split(' ')[1]}, ${reg.split(' ')[0]}]`)
-//         .replace(/\(/g, '[')
-//         .replace(/\)/g, ']')
-//     );
-//     L.polyline(path, {
-//       color: lineColors[line.RT_SYMBOL],
-//       smoothFactor: 1.0,
-//       weight: 4,
-//     }).addTo(map);
-//   });
-// }
+/**
+ * @function loadLines
+ * @description when invoked loadLines() loads the long and lang coordinates from the http get request followed by mapping of the lineColors object which then draws polyline overlays on the map
+ */
+
+function loadLines() {
+  console.log('getSubwayLines >>>', getSubwayLines)
+  getSubwayLines.forEach(line => {
+    const path = JSON.parse(
+      line.the_geom.slice('LINESTRING '.length)
+        .replace(/-\d{2}\.\d+ \d{2}\.\d+/g, (reg)=>`[${reg.split(' ')[1]}, ${reg.split(' ')[0]}]`)
+        .replace(/\(/g, '[')
+        .replace(/\)/g, ']')
+    );
+    console.log('path >>> ', path)
+    L.polyline(path, {
+      color: lineColors[line.RT_SYMBOL],
+      smoothFactor: 1.0,
+      weight: 4,
+    }).addTo(map);
+  });
+}
