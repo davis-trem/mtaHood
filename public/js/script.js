@@ -94,7 +94,6 @@ function loadStops() {
  * @function loadLines
  * @description when invoked loadLines() loads the long and lang coordinates from the http get request followed by mapping of the lineColors object which then draws polyline overlays on the map
  */
-
 function loadLines() {
   getSubwayLines.forEach(line => {
     const path = JSON.parse(
