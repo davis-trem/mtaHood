@@ -1,6 +1,6 @@
 /**
- * @tutorial https://leafletjs.com/reference-1.7.1.html#polyline-option
  * @summary - initialize MapQuest Key
+ * @see {@link https://leafletjs.com/reference-1.7.1.html#polyline-option}
  */
 L.mapquest.key = getMapquestKey;
 
@@ -42,7 +42,7 @@ const lineColors = {
 }
 
 loadHoods();
-loadStops();
+drawStops();
 loadLines();
 
 /**
@@ -74,11 +74,11 @@ function loadHoods() {
 }
 
 /**
- * @function loadStops
- * @description when invoked loadStops() loads stations from server http get requst and iterates through each station. If station doesnt exist we return out of the function otherwise grab the latitude and longtitude coordinates and paint the map accordingly. 
+ * @function drawStops
+ * @description - gets station data from a global variable and iterates through each station. (STATIONS is a global variable boot-strapped on the front-end that is in turn derived from a .CSV READ on the server-side). If the Station doesn't exist it returns out the forEach's callback function otherwise it grabs the latitude and longitude coordinates and draws the stations on the map accordingly via addTo(map) method.
  */
-function loadStops() {
-  getStations.forEach(station => {
+function drawStops() {
+  STATIONS.forEach(station => {
     if (!station['Stop Name']) {
       return;
     }
