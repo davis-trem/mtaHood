@@ -43,7 +43,7 @@ const lineColors = {
 
 loadHoods();
 drawStops();
-loadLines();
+drawLines();
 
 /**
  * @function loadHoods
@@ -91,17 +91,27 @@ function drawStops() {
 }
 
 /**
- * @function loadLines
- * @description when invoked loadLines() loads the long and lang coordinates from the http get request followed by mapping of the lineColors object which then draws polyline overlays on the map
+ * @function drawLines
+ * @description gets subway line data from a global variable and iterates through each subway line. (SUBWAYLINES is a global variable boot-strapped on the front-end that is in turn derived from a .CSV READ on the server-side). 
  */
-function loadLines() {
-  getSubwayLines.forEach(line => {
+function drawLines() {
+  SUBWAYLINES.forEach(line => {
+    
+    /**
+     * @constant {Method} path 
+     * @summary Parses through the_geom string and pulls out the coordinates of the path from station to station
+     * @returns {Object} a list of array like objects with path coordinates
+     */
     const path = JSON.parse(
       line.the_geom.slice('LINESTRING '.length)
-        .replace(/-\d{2}\.\d+ \d{2}\.\d+/g, (reg)=>`[${reg.split(' ')[1]}, ${reg.split(' ')[0]}]`)
+        .replace(/-\d{2}\.\d+ \d{2}\.\d+/g, (reg)=> `[${reg.split(' ')[1]}, ${reg.split(' ')[0]}]`)
         .replace(/\(/g, '[')
         .replace(/\)/g, ']')
     );
+
+    /**
+     * @method polyline utilizes the path coordinates and draws them to the map 
+     */
     L.polyline(path, {
       color: lineColors[line.RT_SYMBOL],
       smoothFactor: 1.0,
