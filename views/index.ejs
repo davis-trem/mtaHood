@@ -10,8 +10,8 @@
         <script>
             const getMapquestKey = '<%= mapquestKey %>';
             const getHoods = JSON.parse('<%= hoods %>'.replaceAll('&#34;', '"').replaceAll('""MULTIPOLYGON', '"MULTIPOLYGON').replaceAll(')))""', ')))"'));
-            const getSubwayLines = JSON.parse('<%= subwayLines %>'.replaceAll('&#34;', '"').replaceAll('""LINESTRING', '"LINESTRING').replaceAll(')""', ')"'));
-            const getStations = JSON.parse('<%= stations %>'.replaceAll('&#34;', '"'));
+            const SUBWAYLINES = JSON.parse('<%= subwayLines %>'.replaceAll('&#34;', '"').replaceAll('""LINESTRING', '"LINESTRING').replaceAll(')""', ')"'));
+            const STATIONS = JSON.parse('<%= stations %>'.replaceAll('&#34;', '"'));
         </script>
         <script src="/js/script.js"></script>
     </body>

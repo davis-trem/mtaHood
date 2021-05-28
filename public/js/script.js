@@ -1,18 +1,32 @@
-// map docs - https://leafletjs.com/reference-1.7.1.html#polyline-option
+/**
+ * @summary - initialize MapQuest Key
+ * @see {@link https://leafletjs.com/reference-1.7.1.html#polyline-option}
+ */
 L.mapquest.key = getMapquestKey;
 
-// 'map' refers to a <div> element with the ID map
+/**
+ * @constant {Object} map
+ * @summary - Define MapQuest map object with a center, layer, and zoom. 'map' refers to a <div> element with the ID map.
+ */
 const map = L.mapquest.map('map', {
   center: [40.76, -73.85],
   layers: L.mapquest.tileLayer('map'),
   zoom: 12
 });
 
+/**
+ * @constant {Object} stationMarker
+ * @summary - marker to indicate local or express stations
+ */
 const stationMarker = L.icon({
   iconUrl: 'images/marker.png',
   iconSize: L.point(8, 8)
 });
 
+/**
+ * @constant {Object} lineColors 
+ * @summary - provides independent color indicators to each subway line
+ */
 const lineColors = {
   'A': '#0039A6', 'C': '#0039A6', 'E': '#0039A6',
   'B': '#FF6319', 'D': '#FF6319', 'F': '#FF6319', 'M': '#FF6319',
@@ -28,9 +42,17 @@ const lineColors = {
 }
 
 loadHoods();
-loadStops();
-loadLines();
+drawStops();
+drawLines();
 
+/**
+ * @function loadHoods
+ * @description - when invoked loadHoods() get hood coordinates and maps the polygons to the map
+ * @constant {Object} coords 
+ * @summary - responsible for getting the coordinates of the hoods and parsing through the Json
+ * @constant {Object} area 
+ * @summary - responsible for constructing the paint properties and paiting them to the map. In addition to binding tooltip AKA name of the hood to the area. 
+ */
 function loadHoods() {
   getHoods.forEach(hood => {
     const coords = JSON.parse(
@@ -39,6 +61,7 @@ function loadHoods() {
         .replace(/\(/g, '[')
         .replace(/\)/g, ']')
     );
+
     const area = L.polygon(coords, {
       color: '#555555',
       weight: 1,
@@ -50,8 +73,12 @@ function loadHoods() {
   });
 }
 
-function loadStops() {
-  getStations.forEach(station => {
+/**
+ * @function drawStops
+ * @description - gets station data from a global variable and iterates through each station. (STATIONS is a global variable boot-strapped on the front-end that is in turn derived from a .CSV READ on the server-side). If the Station doesn't exist it returns out the forEach's callback function otherwise it grabs the latitude and longitude coordinates and draws the stations on the map accordingly via addTo(map) method.
+ */
+function drawStops() {
+  STATIONS.forEach(station => {
     if (!station['Stop Name']) {
       return;
     }
@@ -63,14 +90,28 @@ function loadStops() {
   });
 }
 
-function loadLines() {
-  getSubwayLines.forEach(line => {
+/**
+ * @function drawLines
+ * @description gets subway line data from a global variable and iterates through each subway line. (SUBWAYLINES is a global variable boot-strapped on the front-end that is in turn derived from a .CSV READ on the server-side). 
+ */
+function drawLines() {
+  SUBWAYLINES.forEach(line => {
+    
+    /**
+     * @constant {Method} path 
+     * @summary Parses through the_geom string and pulls out the coordinates of the path from station to station
+     * @returns {Object} a list of array like objects with path coordinates
+     */
     const path = JSON.parse(
       line.the_geom.slice('LINESTRING '.length)
-        .replace(/-\d{2}\.\d+ \d{2}\.\d+/g, (reg)=>`[${reg.split(' ')[1]}, ${reg.split(' ')[0]}]`)
+        .replace(/-\d{2}\.\d+ \d{2}\.\d+/g, (reg)=> `[${reg.split(' ')[1]}, ${reg.split(' ')[0]}]`)
         .replace(/\(/g, '[')
         .replace(/\)/g, ']')
     );
+
+    /**
+     * @method polyline utilizes the path coordinates and draws them to the map 
+     */
     L.polyline(path, {
       color: lineColors[line.RT_SYMBOL],
       smoothFactor: 1.0,

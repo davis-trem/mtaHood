@@ -14,6 +14,12 @@ app.set('view engine', 'ejs');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+/**
+ * @summary routing HTTP method that handles GET requests and renders a view and sends the rendered HTML string to the client
+ * @constant stations - reads the stations.csv
+ * @constant subwayLines - reads the subway_lines.csv
+ * @constant hoods - reads the nynta.csv
+ */
 app.get('/', async (req, res) => {
   let stations = await readCsv('Stations.csv', [
     'Station ID', 'Complex ID', 'GTFS Stop ID' , 'Division', 'Line', 'Stop Name',
